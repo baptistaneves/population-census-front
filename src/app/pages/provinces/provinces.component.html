@@ -1,0 +1,124 @@
+<h2>Províncias</h2>
+<div class="view-wrapper list-page crm-contact-list">
+  <dx-data-grid
+    class="grid theme-dependent content-block"
+    height="100%"
+    [dataSource]="province"
+    keyExpr="id"
+    [allowColumnReordering]="true"
+    [showBorders]="true"
+  >
+    <dxo-load-panel [showPane]="false"></dxo-load-panel>
+    <dxo-scrolling mode="virtual"></dxo-scrolling>
+    <dxo-selection
+      selectAllMode="allPages"
+      showCheckBoxesMode="always"
+      mode="multiple"
+    ></dxo-selection>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-column-chooser [enabled]="false"></dxo-column-chooser>
+    <dxo-search-panel
+      [visible]="true"
+      placeholder="Procurar"
+    ></dxo-search-panel>
+    <dxo-export
+      [enabled]="true"
+      [allowExportSelectedData]="true"
+      [formats]="['xlsx', 'pdf']"
+    >
+    </dxo-export>
+
+    <dxo-toolbar>
+      <dxi-item location="after" locateInMenu="auto">
+        <dx-button
+          text="Adicionar Província"
+          icon="plus"
+          type="default"
+          stylingMode="contained"
+          (onClick)="addContact()"
+        ></dx-button>
+      </dxi-item>
+      <dxi-item
+        location="after"
+        locateInMenu="auto"
+        showText="inMenu"
+        widget="dxButton"
+        [options]="{
+          text: 'Actualizar',
+          icon: 'refresh',
+          onClick: refresh,
+          stylingMode: 'text'
+        }"
+      ></dxi-item>
+      <dxi-item location="after" locateInMenu="auto">
+        <div class="separator"></div>
+      </dxi-item>
+      <dxi-item name="exportButton"></dxi-item>
+      <dxi-item location="after" locateInMenu="auto">
+        <div class="separator"></div>
+      </dxi-item>
+      <dxi-item name="columnChooserButton" locateInMenu="auto"></dxi-item>
+      <dxi-item name="searchPanel" locateInMenu="auto"></dxi-item>
+    </dxo-toolbar>
+
+    <dxi-column
+      dataField="name"
+      caption="Nome"
+      sortOrder="asc"
+      [minWidth]="150"
+    ></dxi-column>
+
+    <dxo-editing
+      mode="popup"
+      [allowUpdating]="true"
+      [allowDeleting]="true"
+      [texts]="{
+        saveRowChanges: 'Salvar',
+        cancelRowChanges: 'Cancelar',
+        deleteRow: 'Eliminar',
+        confirmDeleteMessage: 'Tem certeza de que deseja eliminar esta província?'
+      }">
+
+      <dxo-popup
+        title="Editar Província"
+        [showTitle]="true"
+        [width]="500"
+        [height]="200"></dxo-popup>
+
+        <form>
+          <dxo-form>
+            <dxi-item
+              dataField="name"
+              [colSpan]="2"></dxi-item>
+          </dxo-form>
+        </form>
+    </dxo-editing>
+
+  </dx-data-grid>
+
+  <dx-popup
+    [(visible)]="isAddContactPopupOpened" titleText="Nova Província"
+    [width]="500"
+    [height]="200"
+    [hideOnOutsideClick]="true"
+    [showCloseButton]="true"
+    contentTemplate="popup-content"
+    [resizeEnabled]="true"
+    title="Nova Província" >
+    <div *dxTemplate="let data of 'popup-content'">
+      <form style="width: 100%;">
+        <dx-form [formData]="province">
+          <dxi-item dataField = "name" [isRequired]="true"></dxi-item>
+          <dxi-item
+          itemType="button"
+          title="Salvar"
+          [buttonOptions]="submitButtonOptions"> </dxi-item>
+        </dx-form>
+      </form>
+    </div>
+  </dx-popup>
+
+
+</div>
+
