@@ -3,12 +3,13 @@
   <dx-data-grid
     class="grid theme-dependent content-block"
     height="100%"
-    [dataSource]="province"
+    [dataSource]="provinces"
     keyExpr="id"
     [allowColumnReordering]="true"
     [showBorders]="true"
-  >
-    <dxo-load-panel [showPane]="false"></dxo-load-panel>
+    (onExporting)="exportGrid($event)"
+    (onRowRemoving)="onDeleteProvince($event)">
+
     <dxo-scrolling mode="virtual"></dxo-scrolling>
     <dxo-selection
       selectAllMode="allPages"
@@ -23,10 +24,8 @@
       placeholder="Procurar"
     ></dxo-search-panel>
     <dxo-export
-      [enabled]="true"
-      [allowExportSelectedData]="true"
-      [formats]="['xlsx', 'pdf']"
-    >
+        [enabled]="true"
+        [formats]="['xlsx', 'pdf']">
     </dxo-export>
 
     <dxo-toolbar>
@@ -36,7 +35,7 @@
           icon="plus"
           type="default"
           stylingMode="contained"
-          (onClick)="addContact()"
+          (onClick)="openPopup()"
         ></dx-button>
       </dxi-item>
       <dxi-item
@@ -66,40 +65,30 @@
       dataField="name"
       caption="Nome"
       sortOrder="asc"
-      [minWidth]="150"
-    ></dxi-column>
+      [minWidth]="150"></dxi-column>
 
-    <dxo-editing
-      mode="popup"
-      [allowUpdating]="true"
-      [allowDeleting]="true"
-      [texts]="{
-        saveRowChanges: 'Salvar',
-        cancelRowChanges: 'Cancelar',
-        deleteRow: 'Eliminar',
-        confirmDeleteMessage: 'Tem certeza de que deseja eliminar esta província?'
-      }">
+    <dxi-column type="buttons" [width]="110">
+      <dxi-button name="edit" [visible]="true" icon="edit" [onClick]="openUpdateFormPopup"></dxi-button>
+      <dxi-button name="delete"  [visible]="true" icon="trash"></dxi-button>
+    </dxi-column>
 
-      <dxo-popup
-        title="Editar Província"
-        [showTitle]="true"
-        [width]="500"
-        [height]="200"></dxo-popup>
 
-        <form>
-          <dxo-form>
-            <dxi-item
-              dataField="name"
-              [colSpan]="2"></dxi-item>
-          </dxo-form>
-        </form>
-    </dxo-editing>
+  <dxo-editing
+    mode="popup"
+    [allowDeleting]="true"
+    [texts]="{
+      saveRowChanges: 'Salvar',
+      cancelRowChanges: 'Cancelar',
+      deleteRow: 'Eliminar',
+      confirmDeleteMessage: 'Tem certeza de que deseja eliminar esta província?'
+    }">
+  </dxo-editing>
 
   </dx-data-grid>
 
   <dx-popup
-    [(visible)]="isAddContactPopupOpened" titleText="Nova Província"
-    [width]="500"
+    [(visible)]="isAddProvincePopupOpened" titleText="Nova Província"
+    [width]="600"
     [height]="200"
     [hideOnOutsideClick]="true"
     [showCloseButton]="true"
@@ -107,18 +96,62 @@
     [resizeEnabled]="true"
     title="Nova Província" >
     <div *dxTemplate="let data of 'popup-content'">
-      <form style="width: 100%;">
-        <dx-form [formData]="province">
-          <dxi-item dataField = "name" [isRequired]="true"></dxi-item>
+      <form [formGroup]="provinceForm">
+        <div *ngIf="errors && errors.length" style="color: #ff5252;">
+          <ul>
+            <li *ngFor="let error of errors">{{ error.error }}</li>
+          </ul>
+        </div>
+        <dx-form
+        [formData]="provinceForm.value"
+        [showValidationSummary]="true"
+        (onFieldDataChanged)="onFieldDataChanged($event)">
           <dxi-item
-          itemType="button"
-          title="Salvar"
-          [buttonOptions]="submitButtonOptions"> </dxi-item>
+            dataField = "name"
+            [isRequired]="true"
+            [editorOptions]="{ placeholder: 'Digite o nome da província' }">
+            <dxi-validation-rule type="required" message="O nome deve ser informado"></dxi-validation-rule>
+            <dxi-validation-rule type="stringLength" [min]="3" message="O nome deve no minímo 3 caracteres"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item itemType="button" title="Salvar" [buttonOptions]="submitButtonOptions"> </dxi-item>
         </dx-form>
       </form>
     </div>
   </dx-popup>
 
+  <dx-popup
+  [(visible)]="isUpdateProvincePopupOpened"
+  titleText="Editar Província"
+  [width]="600"
+  [height]="220"
+  [hideOnOutsideClick]="true"
+  [showCloseButton]="true"
+  contentTemplate="popup-content"
+  [resizeEnabled]="true"
+  title="Editar Província" >
+  <div *dxTemplate="let data of 'popup-content'">
+    <form [formGroup]="updateProvinceForm">
+      <div *ngIf="errors && errors.length" style="color: #ff5252;">
+        <ul>
+          <li *ngFor="let error of errors">{{ error.error }}</li>
+        </ul>
+      </div>
+      <dx-form
+      [formData]="updateProvinceForm.value"
+      [showValidationSummary]="true"
+      (onFieldDataChanged)="onFieldDataChangedUpdateForm($event)">
+        <dxi-item
+          dataField = "name"
+          [isRequired]="true"
+          [editorOptions]="{ placeholder: 'Digite o nome da província' }">
+          <dxi-validation-rule type="required" message="O nome deve ser informado"></dxi-validation-rule>
+          <dxi-validation-rule type="stringLength" [min]="3" message="O nome deve no minímo 3 caracteres"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item itemType="button" title="Salvar" [buttonOptions]="updateButtonOptions"> </dxi-item>
+      </dx-form>
+    </form>
+  </div>
+</dx-popup>
 
 </div>
 

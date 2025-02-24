@@ -8,21 +8,32 @@ import { FooterModule, ResetPasswordFormModule, CreateAccountFormModule, ChangeP
 import { AuthService, ScreenService, AppInfoService } from './shared/services';
 import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
-import { DxButtonModule, DxDataGridModule, DxDropDownButtonModule, DxFormModule, DxLoadIndicatorModule, DxPopupModule, DxSelectBoxModule, DxTextBoxModule } from 'devextreme-angular';
+import { DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDropDownButtonModule, DxFormModule, DxLoadIndicatorModule, DxPopupModule, DxSelectBoxModule, DxTabsModule, DxTextBoxModule, DxValidationSummaryModule, DxValidatorModule } from 'devextreme-angular';
 import { LayoutsModule } from './layouts/layouts.module';
 import { AuthLayoutComponent } from './authLayout/authLayout.component';
 import { ProvincesComponent } from './pages/provinces/provinces.component';
 import { MunicipalitiesComponent } from './pages/municipalities/municipalities.component';
+import { FamiliesComponent } from './pages/families/families.component';
+import { ToastrModule } from 'ngx-toastr';
+import { AuthGuard } from './guards/auth.guard';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { ProvinceService } from './services/province.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
     AuthLayoutComponent,
     ProvincesComponent,
-    MunicipalitiesComponent
+    MunicipalitiesComponent,
+    FamiliesComponent
   ],
   imports: [
     BrowserModule,
     DxHttpModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     SideNavOuterToolbarModule,
     SideNavInnerToolbarModule,
     SingleCardModule,
@@ -38,14 +49,23 @@ import { MunicipalitiesComponent } from './pages/municipalities/municipalities.c
     DxDropDownButtonModule,
     DxSelectBoxModule,
     DxTextBoxModule,
+    DxValidatorModule,
+    DxValidationSummaryModule,
     DxPopupModule,
+    DxCheckBoxModule,
+    DxTabsModule,
     UnauthenticatedContentModule,
+    ToastrModule.forRoot(),
     AppRoutingModule
   ],
   providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    AuthGuard,
     AuthService,
     ScreenService,
-    AppInfoService
+    AppInfoService,
+
+    ProvinceService
   ],
   bootstrap: [AppComponent]
 })

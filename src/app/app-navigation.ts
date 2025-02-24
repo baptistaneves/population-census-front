@@ -5,6 +5,11 @@ export const navigation = [
     icon: 'home'
   },
   {
+    text: 'Famílias',
+    path: '/familias',
+    icon: 'user'
+  },
+  {
     text: 'Configurações',
     icon: 'preferences',
     items: [
@@ -17,12 +22,8 @@ export const navigation = [
         path: '/municipios'
       },
       {
-        text: 'Perfil',
-        path: '/profile'
-      },
-      {
-        text: 'Tarefas',
-        path: '/tasks'
+        text: 'Faixa Etária',
+        path: '/'
       }
     ]
   }

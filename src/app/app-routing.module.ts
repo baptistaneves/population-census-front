@@ -9,6 +9,7 @@ import { LayoutComponent } from './layouts/layout.component';
 import { AuthLayoutComponent } from './authLayout/authLayout.component';
 import { ProvincesComponent } from './pages/provinces/provinces.component';
 import { MunicipalitiesComponent } from './pages/municipalities/municipalities.component';
+import { FamiliesComponent } from './pages/families/families.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent, canActivate: [ AuthGuardService ] },
       { path: 'provincias', component: ProvincesComponent, canActivate: [ AuthGuardService ] },
       { path: 'municipios', component: MunicipalitiesComponent, canActivate: [ AuthGuardService ] },
+      { path: 'familias', component: FamiliesComponent, canActivate: [ AuthGuardService ] },
       { path: 'tasks', component: TasksComponent, canActivate: [ AuthGuardService ] },
       { path: 'profile', component: ProfileComponent, canActivate: [ AuthGuardService ] }
     ],

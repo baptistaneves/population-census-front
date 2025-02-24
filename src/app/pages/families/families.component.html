@@ -1,0 +1,360 @@
+<h2>Famílias</h2>
+
+<div class="content-block">
+  <dx-tabs [(selectedIndex)]="selectedTabIndex">
+    <dxi-item>
+      <div *dxTemplate>
+        <div>Geral</div>
+      </div>
+    </dxi-item>
+
+    <dxi-item>
+      <div *dxTemplate>
+        <div>Membros</div>
+      </div>
+    </dxi-item>
+
+    <dxi-item>
+      <div *dxTemplate>
+        <div>Nascimentos</div>
+      </div>
+    </dxi-item>
+
+    <dxi-item>
+      <div *dxTemplate>
+        <div>Óbitos</div>
+      </div>
+    </dxi-item>
+  </dx-tabs>
+</div>
+
+<div class="content-block dx-card responsive-paddings" style="margin: 30px 0;">
+  <div *ngIf="selectedTabIndex === 0">
+      <dx-form [formData]="municipalities" [colCount]="2">
+
+        <dxi-item dataField="name" [isRequired]="true">
+          <dxo-label text="Endereço"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          dataField="provinceName"
+          [isRequired]="true">
+          <dxo-label text="Zona Residencial"></dxo-label>
+        </dxi-item>
+
+        <dxi-item dataField="name" [isRequired]="true">
+          <dxo-label text="Renda Familiar"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          dataField="provinceName"
+          [isRequired]="true">
+          <dxo-label text="Nº de Membros"></dxo-label>
+        </dxi-item>
+
+        <dxi-item itemType="group">
+
+          <dx-check-box
+              text="Acesso a Água Potável"
+              iconSize="16" >
+          </dx-check-box>
+
+          <dx-check-box
+              text="Acesso ao Saneamento Básico"
+              iconSize="16" >
+          </dx-check-box>
+
+          <dx-check-box
+              text="Acesso a Electricidade"
+              iconSize="16" >
+          </dx-check-box>
+        </dxi-item>
+
+        <dxi-item itemType="group">
+          <dxi-item dataField="name" [isRequired]="true">
+            <dxo-label text="Situação Habitacional"></dxo-label>
+          </dxi-item>
+
+          <dxi-item
+            dataField="provinceName"
+            [isRequired]="true">
+            <dxo-label text="Tipo de Habitação"></dxo-label>
+          </dxi-item>
+        </dxi-item>
+      </dx-form>
+  </div>
+
+  <div *ngIf="selectedTabIndex === 1">
+    <dx-data-grid
+      class="grid theme-dependent content-block"
+      height="100%"
+      [dataSource]="individuals"
+      keyExpr="id"
+      [allowColumnReordering]="true"
+      [showBorders]="true"
+    >
+      <dxo-toolbar>
+        <dxi-item location="after" locateInMenu="auto">
+          <dx-button
+            text="Adicionar Membro"
+            icon="plus"
+            type="default"
+            stylingMode="contained"
+            (onClick)="addMember()"></dx-button>
+        </dxi-item>
+      </dxo-toolbar>
+
+      <dxi-column
+        dataField="name"
+        caption="Nome"
+        sortOrder="asc"
+        [minWidth]="150"
+      ></dxi-column>
+
+      <dxi-column
+        dataField="birthDay"
+        caption="Data Nascimento"
+        sortOrder="asc"
+        [minWidth]="150"
+      ></dxi-column>
+
+      <dxi-column
+      dataField="gender"
+      caption="Genêro"
+      sortOrder="asc"
+      [minWidth]="150"
+      ></dxi-column>
+
+      <dxi-column
+      dataField="profission"
+      caption="Profissão"
+      sortOrder="asc"
+      [minWidth]="150"
+      ></dxi-column>
+
+      <dxi-column
+      dataField="academyc"
+      caption="Nivel Acadêmico"
+      sortOrder="asc"
+      [minWidth]="150"
+      ></dxi-column>
+
+      <dxi-column
+      dataField="canReadAndWrite"
+      caption="Alfabetizado"
+      sortOrder="asc"
+      [minWidth]="150"
+      ></dxi-column>
+
+      <dxi-column
+      dataField="responsable"
+      caption="Responsável"
+      sortOrder="asc"
+      [minWidth]="150"
+      ></dxi-column>
+
+      <dxo-editing
+        mode="popup"
+        [allowUpdating]="true"
+        [allowDeleting]="true"
+        [texts]="{
+          saveRowChanges: 'Salvar',
+          cancelRowChanges: 'Cancelar',
+          deleteRow: 'Eliminar',
+          confirmDeleteMessage: 'Tem certeza de que deseja eliminar esta província?'
+        }">
+
+        <dxo-popup
+          title="Editar Membro"
+          [showTitle]="true"
+          [width]="500"
+          [height]="200"></dxo-popup>
+
+          <form>
+            <dxo-form>
+              <dxi-item
+                dataField="name"
+                [colSpan]="2"></dxi-item>
+            </dxo-form>
+          </form>
+      </dxo-editing>
+    </dx-data-grid>
+
+    <dx-popup
+      [(visible)]="isAddMemberPopupOpened"
+      [width]="700"
+      [height]="600"
+      [hideOnOutsideClick]="true"
+      [showCloseButton]="true"
+      contentTemplate="popup-content"
+      [resizeEnabled]="true"
+      title="Novo Membro" >
+      <div *dxTemplate="let data of 'popup-content'">
+        <form style="width: 100%;">
+          <dx-form [formData]="province">
+            <dxi-item dataField = "name" [isRequired]="true">
+              <dxo-label text="Nome"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </form>
+      </div>
+    </dx-popup>
+  </div>
+
+  <div *ngIf="selectedTabIndex === 2">
+    <dx-data-grid
+    class="grid theme-dependent content-block"
+    height="100%"
+    [dataSource]="province"
+    keyExpr="id"
+    [allowColumnReordering]="true"
+    [showBorders]="true"
+  >
+    <dxo-toolbar>
+      <dxi-item location="after" locateInMenu="auto">
+        <dx-button
+          text="Adicionar Nascimento"
+          icon="plus"
+          type="default"
+          stylingMode="contained"
+        ></dx-button>
+      </dxi-item>
+    </dxo-toolbar>
+
+    <dxi-column
+      dataField="name"
+      caption="Nome"
+      sortOrder="asc"
+      [minWidth]="150"
+    ></dxi-column>
+
+    <dxo-editing
+      mode="popup"
+      [allowUpdating]="true"
+      [allowDeleting]="true"
+      [texts]="{
+        saveRowChanges: 'Salvar',
+        cancelRowChanges: 'Cancelar',
+        deleteRow: 'Eliminar',
+        confirmDeleteMessage: 'Tem certeza de que deseja eliminar este evento?'
+      }">
+
+      <dxo-popup
+        title="Editar Evento"
+        [showTitle]="true"
+        [width]="500"
+        [height]="200"></dxo-popup>
+
+        <form>
+          <dxo-form>
+            <dxi-item
+              dataField="name"
+              [colSpan]="2"></dxi-item>
+          </dxo-form>
+        </form>
+    </dxo-editing>
+
+    </dx-data-grid>
+
+    <dx-popup
+      [(visible)]="isAddContactPopupOpened" titleText="Nova Província"
+      [width]="500"
+      [height]="200"
+      [hideOnOutsideClick]="true"
+      [showCloseButton]="true"
+      contentTemplate="popup-content"
+      [resizeEnabled]="true"
+      title="Nova Província" >
+      <div *dxTemplate="let data of 'popup-content'">
+        <form style="width: 100%;">
+          <dx-form [formData]="province">
+            <dxi-item dataField = "name" [isRequired]="true"></dxi-item>
+            <dxi-item
+            itemType="button"
+            title="Salvar"
+            [buttonOptions]="submitButtonOptions"> </dxi-item>
+          </dx-form>
+        </form>
+      </div>
+    </dx-popup>
+  </div>
+
+  <div *ngIf="selectedTabIndex === 3">
+    <dx-data-grid
+    class="grid theme-dependent content-block"
+    height="100%"
+    [dataSource]="province"
+    keyExpr="id"
+    [allowColumnReordering]="true"
+    [showBorders]="true"
+  >
+    <dxo-toolbar>
+      <dxi-item location="after" locateInMenu="auto">
+        <dx-button
+          text="Adicionar Óbito"
+          icon="plus"
+          type="default"
+          stylingMode="contained"
+        ></dx-button>
+      </dxi-item>
+    </dxo-toolbar>
+
+    <dxi-column
+      dataField="name"
+      caption="Nome"
+      sortOrder="asc"
+      [minWidth]="150"
+    ></dxi-column>
+
+    <dxo-editing
+      mode="popup"
+      [allowUpdating]="true"
+      [allowDeleting]="true"
+      [texts]="{
+        saveRowChanges: 'Salvar',
+        cancelRowChanges: 'Cancelar',
+        deleteRow: 'Eliminar',
+        confirmDeleteMessage: 'Tem certeza de que deseja eliminar este evento?'
+      }">
+
+      <dxo-popup
+        title="Editar Evento"
+        [showTitle]="true"
+        [width]="500"
+        [height]="200"></dxo-popup>
+
+        <form>
+          <dxo-form>
+            <dxi-item
+              dataField="name"
+              [colSpan]="2"></dxi-item>
+          </dxo-form>
+        </form>
+    </dxo-editing>
+
+    </dx-data-grid>
+
+    <dx-popup
+      [(visible)]="isAddContactPopupOpened" titleText="Nova Província"
+      [width]="500"
+      [height]="200"
+      [hideOnOutsideClick]="true"
+      [showCloseButton]="true"
+      contentTemplate="popup-content"
+      [resizeEnabled]="true"
+      title="Nova Província" >
+      <div *dxTemplate="let data of 'popup-content'">
+        <form style="width: 100%;">
+          <dx-form [formData]="province">
+            <dxi-item dataField = "name" [isRequired]="true"></dxi-item>
+            <dxi-item
+            itemType="button"
+            title="Salvar"
+            [buttonOptions]="submitButtonOptions"> </dxi-item>
+          </dx-form>
+        </form>
+      </div>
+    </dx-popup>
+  </div>
+</div>
+

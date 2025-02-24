@@ -24,6 +24,10 @@
     "devextreme": "24.2.3",
     "devextreme-angular": "24.2.3",
     "devextreme-schematics": "^1.8.0",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
+    "jspdf": "^3.0.0",
+    "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
